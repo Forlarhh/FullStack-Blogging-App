@@ -9,6 +9,11 @@ on:
 jobs:
   check_vault_and_trigger_pipeline:
     runs-on: ubuntu-latest
+
+    env:
+        VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+        VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+        
     
     steps:
     - name: Install Vault CLI
@@ -17,11 +22,6 @@ jobs:
         sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
         sudo apt-get update && sudo apt-get install vault -y
     
-    - name: Set Environment Variables
-      env:
-        VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
-        VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
-        
     - name: Cache Vault Data Hash
       id: cache_hash
       uses: actions/cache@v3
