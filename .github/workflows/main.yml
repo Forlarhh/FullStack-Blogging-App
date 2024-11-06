@@ -16,22 +16,12 @@ jobs:
         curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
         sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
         sudo apt-get update && sudo apt-get install vault -y
-    - name: Start Vault in Dev Mode
-      env:
-        VAULT_DEV_ROOT_TOKEN_ID: ${{ secrets.VAULT_DEV_ROOT_TOKEN_ID }}  # Set your fixed root token here
-      run: |
-        nohup vault server -dev -dev-root-token-id="$VAULT_DEV_ROOT_TOKEN_ID" > vault.log 2>&1 &
-        sleep 5  # Give Vault some time to start
-    - name: Write Dummy Data to Vault
-      env:
-        VAULT_ADDR: 'http://127.0.0.1:8200'
-        VAULT_TOKEN: ${{ secrets.VAULT_DEV_ROOT_TOKEN_ID }}
-      run: |
-        vault kv put secret/my-secret foo=bar
+    
     - name: Set Environment Variables
-      run: |
-        echo "VAULT_ADDR=http://127.0.0.1:8200" >> $GITHUB_ENV
-        echo "VAULT_TOKEN=${{ secrets.VAULT_DEV_ROOT_TOKEN_ID }}" >> $GITHUB_ENV
+      env:
+        VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+        VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+        
     - name: Cache Vault Data Hash
       id: cache_hash
       uses: actions/cache@v3
