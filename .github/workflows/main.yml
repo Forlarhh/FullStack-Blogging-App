@@ -3,7 +3,7 @@ name: Vault Change Detection and Azure Pipeline Trigger
 on:
   schedule:
     # Run every hour
-    - cron: '0 * * * *'
+    - cron: '0 2 * * *'
   workflow_dispatch:
 
 jobs:
