@@ -22,12 +22,7 @@ jobs:
       run: |
         nohup vault server -dev -dev-root-token-id="$VAULT_TOKEN" > vault.log 2>&1 &
         sleep 5  # Give Vault some time to start
-    - name: Write Dummy Data to Vault
-      env:
-        VAULT_ADDR: 'http://127.0.0.1:8200'
-        VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
-      run: |
-        vault kv put secret/my-secret foo=bar
+    
     - name: Set Environment Variables
       run: |
         echo "VAULT_ADDR=http://127.0.0.1:8200" >> $GITHUB_ENV
